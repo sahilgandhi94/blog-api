@@ -15,12 +15,12 @@ namespace monster_assignment.Controllers
     {
         private readonly string POST_DB_PATH = "data/posts.json";
         private List<Post> _posts;
-        // private List<
 
         public PostsController()
         {
             using (StreamReader r = new StreamReader(POST_DB_PATH))
             {
+                // load json data from file
                 string json = r.ReadToEnd();
                 _posts = JsonConvert.DeserializeObject<List<Post>>(json);
             }
@@ -28,6 +28,7 @@ namespace monster_assignment.Controllers
 
         private void updateDB()
         {
+            // update data on json file
             using (StreamWriter sw = new StreamWriter(@POST_DB_PATH))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -82,11 +83,9 @@ namespace monster_assignment.Controllers
             {
                 return NotFound();
             }
-
             postToUpdate.userId = post.userId;
             postToUpdate.title = post.title;
             postToUpdate.body = post.body;
-
             this.updateDB();
             return Ok(postToUpdate);
         }
@@ -118,13 +117,11 @@ namespace monster_assignment.Controllers
             {
                 return NotFound();
             }
-
             patch.ApplyTo(postToUpdate, ModelState);
             if (!ModelState.IsValid)
             {
                 return new BadRequestObjectResult(ModelState);
             }
-
             this.updateDB();
             return Ok(postToUpdate);
         }
